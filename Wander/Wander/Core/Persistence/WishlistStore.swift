@@ -7,7 +7,7 @@
 
 import SwiftData
 import Foundation
-import Combine
+import MapboxSearch
 
 @MainActor
 @Observable
@@ -20,16 +20,16 @@ final class WishlistStore {
         fetchItems()
     }
     
-    private func fetchItems() {
+    func fetchItems() {
         let descriptor = FetchDescriptor<WishlistItem>(
             sortBy: [SortDescriptor(\.addedAt, order: .reverse)]
         )
         items = (try? modelContext.fetch(descriptor)) ?? []
     }
     
-    func add(_ place: Place, note: String? = nil) {
-        guard !isInWishlist(place) else { return }
-        let item = WishlistItem(from: place, note: note)
+    func add(_ result: PlaceAutocomplete.Result, note: String? = nil) {
+        guard !isInWishlist(id: result.mapboxId) else { return }
+        let item = WishlistItem(from: result, note: note)
         modelContext.insert(item)
         save()
     }
@@ -44,13 +44,15 @@ final class WishlistStore {
         save()
     }
     
-    func isInWishlist(_ place: Place) -> Bool {
-        items.contains { $0.id == place.id }
+    func isInWishlist(id: String?) -> Bool {
+        guard let id else { return false }
+        return items.contains { $0.id == id }
     }
     
     private func save() {
         do {
             try modelContext.save()
+            fetchItems()
         } catch {
             print("WishlistStore save error: \(error.localizedDescription)")
         }

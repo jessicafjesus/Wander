@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 import CoreLocation
+import MapboxSearch
 
 @Model
 final class WishlistItem {
@@ -16,34 +17,31 @@ final class WishlistItem {
     var city: String
     var country: String
     var itemDescription: String?
-    var imageURLString: String?
+//    var imageURLString: String?
     var latitude: Double
     var longitude: Double
     var note: String?
     var addedAt: Date
     
-    init(from place: Place, note: String? = nil) {
-        self.id = place.id
-        self.name = place.name
-        self.city = place.city
-        self.country = place.country
-        self.itemDescription = place.description
-        self.imageURLString = place.imageURL?.absoluteString
-        self.latitude = place.latitude
-        self.longitude = place.longitude
+    init(from result: PlaceAutocomplete.Result, note: String? = nil) {
+        self.id = result.mapboxId ?? result.name
+        self.name = result.name
+        self.city = result.address?.place ?? ""
+        self.country = result.address?.country ?? ""
+        self.itemDescription = result.description
+//        self.imageURLString = result.primaryImage
+        self.latitude = result.coordinate?.latitude ?? 0
+        self.longitude = result.coordinate?.longitude ?? 0
         self.note = note
         self.addedAt = Date()
     }
     
-    var imageURL: URL? {
-        guard let string = imageURLString else { return nil }
-        return URL(string: string)
-    }
+//    var imageURL: URL? {
+//        guard let string = imageURLString else { return nil }
+//        return URL(string: string)
+//    }
     
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(
-            latitude: latitude,
-            longitude: longitude
-        )
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }

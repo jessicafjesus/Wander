@@ -5,35 +5,31 @@
 //  Created by Jessica Jesus on 08/03/2026.
 //
 
-import Combine
 import SwiftUI
-import MapKit
+import MapboxMaps
+import Combine
 
 @MainActor
-@Observable
-final class WanderMapViewModel {
-    private let wishlistStore: WishlistStore
-    private var cancellables = Set<AnyCancellable>()
-    
-    var selectedItem: WishlistItem?
-    var cameraPosition: MapCameraPosition = .region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(
-                latitude: 52.3676,
-                longitude: 4.9041
-            ),
-            span: MKCoordinateSpan(
-                latitudeDelta: 20,
-                longitudeDelta: 20
-            )
-        )
+final class WanderMapViewModel: ObservableObject {
+    @Published var selectedItem: WishlistItem?
+    @Published var viewport: Viewport = .camera(
+        center: CLLocationCoordinate2D(
+            latitude: 52.3676,
+            longitude: 4.9041
+        ),
+        zoom: 3.5,
+        bearing: 0,
+        pitch: 0
     )
     
-    var items: [WishlistItem] { wishlistStore.items }
+    private(set) var wishlistStore: WishlistStore
     
     init(wishlistStore: WishlistStore) {
         self.wishlistStore = wishlistStore
     }
+    
+    var items: [WishlistItem] { wishlistStore.items }
+    var isEmpty: Bool { wishlistStore.items.isEmpty }
     
     func selectItem(_ item: WishlistItem) {
         withAnimation(.spring()) {
@@ -41,11 +37,28 @@ final class WanderMapViewModel {
         }
     }
     
-    func clearSelection() {
-        selectedItem = nil
+    func flyTo(_ item: WishlistItem) {
+        withAnimation {
+            viewport = .camera(
+                center: item.coordinate,
+                zoom: 12,
+                bearing: 0,
+                pitch: 0
+            )
+        }
     }
     
-    var isEmpty: Bool {
-        items.isEmpty
+    func resetCamera() {
+        withAnimation {
+            viewport = .camera(
+                center: CLLocationCoordinate2D(
+                    latitude: 52.3676,
+                    longitude: 4.9041
+                ),
+                zoom: 3.5,
+                bearing: 0,
+                pitch: 0
+            )
+        }
     }
 }

@@ -9,53 +9,37 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    private var wishlistStore: WishlistStore
+    
+    init(wishlistStore: WishlistStore) {
+        self.wishlistStore = wishlistStore
+    }
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
+        TabView {
+            WanderMapView(
+                viewModel: WanderMapViewModel(wishlistStore: wishlistStore)
+            )
+            .tabItem {
+                Label("Map", systemImage: "map.fill")
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
+            
+//            WishlistView(
+//                viewModel: WishlistViewModel(wishlistStore: wishlistStore)
+//            )
+//            .tabItem {
+//                Label("Wishlist", systemImage: "heart.fill")
+//            }
+//            
+//            SearchView(
+//                viewModel: SearchViewModel(
+//                    wishlistStore: wishlistStore
+//                )
+//            )
+//            .tabItem {
+//                Label("Search", systemImage: "magnifyingglass")
+//            }
         }
+//        .tint(.wanderAccent)
     }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
-    }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

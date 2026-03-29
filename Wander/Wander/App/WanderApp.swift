@@ -10,23 +10,20 @@ import SwiftData
 
 @main
 struct WanderApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppEntryView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(for: WishlistItem.self)
+    }
+}
+
+struct AppEntryView: View {
+    @Environment(\.modelContext) private var modelContext
+    
+    var body: some View {
+        ContentView(
+            wishlistStore: WishlistStore(modelContext: modelContext)
+        )
     }
 }
