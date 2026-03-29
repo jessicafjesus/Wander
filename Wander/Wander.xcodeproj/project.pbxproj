@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1BEC2B7F2F78A693008F24F4 /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEC2B7E2F78A693008F24F4 /* MapboxMaps */; };
+		1BEC2B8B2F79E5F7008F24F4 /* MapboxSearch in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEC2B8A2F79E5F7008F24F4 /* MapboxSearch */; };
+		1BEC2B8D2F79E5F7008F24F4 /* MapboxSearchUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEC2B8C2F79E5F7008F24F4 /* MapboxSearchUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BEC2B7F2F78A693008F24F4 /* MapboxMaps in Frameworks */,
+				1BEC2B8D2F79E5F7008F24F4 /* MapboxSearchUI in Frameworks */,
+				1BEC2B8B2F79E5F7008F24F4 /* MapboxSearch in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +119,7 @@
 				1B018F032F58FC8C00059380 /* Sources */,
 				1B018F042F58FC8C00059380 /* Frameworks */,
 				1B018F052F58FC8C00059380 /* Resources */,
+				1BEC2B802F79D9DB008F24F4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -126,6 +131,8 @@
 			name = Wander;
 			packageProductDependencies = (
 				1BEC2B7E2F78A693008F24F4 /* MapboxMaps */,
+				1BEC2B8A2F79E5F7008F24F4 /* MapboxSearch */,
+				1BEC2B8C2F79E5F7008F24F4 /* MapboxSearchUI */,
 			);
 			productName = Wander;
 			productReference = 1B018F072F58FC8C00059380 /* Wander.app */;
@@ -211,6 +218,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				1BEC2B7C2F78A58B008F24F4 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
+				1BEC2B812F79DB2B008F24F4 /* XCRemoteSwiftPackageReference "search-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1B018F082F58FC8C00059380 /* Products */;
@@ -247,6 +255,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1BEC2B802F79D9DB008F24F4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Look for a global file named 'mapbox' or '.mapbox' within the home directory\ntoken_file=~/.mapbox\ntoken_file2=~/mapbox\ntoken=\"$(cat $token_file 2>/dev/null || cat $token_file2 2>/dev/null)\"\nif [ \"$token\" ]; then\n  plutil -replace MBXAccessToken -string $token \"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\nelse\n  echo 'warning: Missing Mapbox access token'\n  open 'https://console.mapbox.com/account/access-tokens/'\n  echo \"warning: Get an access token from <https://console.mapbox.com/account/access-tokens/>, then create a new file at $token_file or $token_file2 that contains the access token.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1B018F032F58FC8C00059380 /* Sources */ = {
@@ -599,6 +628,14 @@
 				minimumVersion = 11.0.0;
 			};
 		};
+		1BEC2B812F79DB2B008F24F4 /* XCRemoteSwiftPackageReference "search-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mapbox/search-ios.git";
+			requirement = {
+				kind = exactVersion;
+				version = 2.20.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -606,6 +643,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BEC2B7C2F78A58B008F24F4 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
 			productName = MapboxMaps;
+		};
+		1BEC2B8A2F79E5F7008F24F4 /* MapboxSearch */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BEC2B812F79DB2B008F24F4 /* XCRemoteSwiftPackageReference "search-ios" */;
+			productName = MapboxSearch;
+		};
+		1BEC2B8C2F79E5F7008F24F4 /* MapboxSearchUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BEC2B812F79DB2B008F24F4 /* XCRemoteSwiftPackageReference "search-ios" */;
+			productName = MapboxSearchUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

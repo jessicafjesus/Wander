@@ -13,6 +13,9 @@ xcuserdata/
 *.dSYM.zip
 *.dSYM
 
+##Mapbox
+.mapbox
+
 ## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
