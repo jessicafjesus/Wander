@@ -17,7 +17,7 @@ final class WishlistItem {
     var city: String
     var country: String
     var itemDescription: String?
-//    var imageURLString: String?
+//    var itemImage: Image?
     var latitude: Double
     var longitude: Double
     var note: String?
@@ -29,17 +29,12 @@ final class WishlistItem {
         self.city = result.address?.place ?? ""
         self.country = result.address?.country ?? ""
         self.itemDescription = result.description
-//        self.imageURLString = result.primaryImage
+//        self.itemImage = result.primaryImage
         self.latitude = result.coordinate?.latitude ?? 0
         self.longitude = result.coordinate?.longitude ?? 0
         self.note = note
         self.addedAt = Date()
     }
-    
-//    var imageURL: URL? {
-//        guard let string = imageURLString else { return nil }
-//        return URL(string: string)
-//    }
     
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)

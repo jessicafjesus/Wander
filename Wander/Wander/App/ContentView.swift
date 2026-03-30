@@ -31,15 +31,15 @@ struct ContentView: View {
 //                Label("Wishlist", systemImage: "heart.fill")
 //            }
 //            
-//            SearchView(
-//                viewModel: SearchViewModel(
-//                    wishlistStore: wishlistStore
-//                )
-//            )
-//            .tabItem {
-//                Label("Search", systemImage: "magnifyingglass")
-//            }
+            SearchView(
+                viewModel: SearchViewModel(
+                    wishlistStore: wishlistStore
+                )
+            )
+            .tabItem {
+                Label("Search", systemImage: "magnifyingglass")
+            }
         }
-//        .tint(.wanderAccent)
+        .tint(.wanderAccent)
     }
 }
