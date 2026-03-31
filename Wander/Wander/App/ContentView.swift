@@ -24,13 +24,13 @@ struct ContentView: View {
                 Label("Map", systemImage: "map.fill")
             }
             
-//            WishlistView(
-//                viewModel: WishlistViewModel(wishlistStore: wishlistStore)
-//            )
-//            .tabItem {
-//                Label("Wishlist", systemImage: "heart.fill")
-//            }
-//            
+            WishlistView(
+                viewModel: WishlistViewModel(wishlistStore: wishlistStore)
+            )
+            .tabItem {
+                Label("Wishlist", systemImage: "heart.fill")
+            }
+            
             SearchView(
                 viewModel: SearchViewModel(
                     wishlistStore: wishlistStore
