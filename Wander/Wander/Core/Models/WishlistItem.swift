@@ -17,7 +17,6 @@ final class WishlistItem {
     var city: String
     var country: String
     var itemDescription: String?
-//    var itemImage: Image?
     var latitude: Double
     var longitude: Double
     var note: String?
@@ -29,7 +28,6 @@ final class WishlistItem {
         self.city = result.address?.place ?? ""
         self.country = result.address?.country ?? ""
         self.itemDescription = result.description
-//        self.itemImage = result.primaryImage
         self.latitude = result.coordinate?.latitude ?? 0
         self.longitude = result.coordinate?.longitude ?? 0
         self.note = note
